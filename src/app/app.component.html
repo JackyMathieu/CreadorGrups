@@ -3,10 +3,10 @@
     <h1
       class="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-400 mb-2"
     >
-      Group Sorter
+      Creador de Grups
     </h1>
     <p class="text-lg text-slate-500 dark:text-slate-400">
-      Sort people into two balanced groups.
+      Crea grups equilibrats donada una llista d'alumnes.
     </p>
   </header>
 
@@ -24,7 +24,7 @@
         <label
           for="name"
           class="block mb-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-          >Name</label
+          >Nom</label
         >
         <input
           id="name"
@@ -39,7 +39,7 @@
       <div>
         <label
           class="block mb-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-          >Sex</label
+          >Sexe</label
         >
         <div
           class="flex items-center gap-4 p-2 bg-slate-50 dark:bg-slate-700 rounded-lg"
@@ -53,7 +53,7 @@
               (change)="sex.set('boy')"
               class="text-blue-600 focus:ring-blue-500"
             />
-            Boy
+            Masculí
           </label>
           <label class="flex items-center gap-2 cursor-pointer">
             <input
@@ -64,7 +64,7 @@
               (change)="sex.set('girl')"
               class="text-pink-600 focus:ring-pink-500"
             />
-            Girl
+            Femení
           </label>
         </div>
       </div>
@@ -72,7 +72,7 @@
       <div>
         <label
           class="block mb-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-          >Knowledge Level</label
+          >Nivel d'Aprenentatge</label
         >
         <div
           class="flex items-center gap-4 p-2 bg-slate-50 dark:bg-slate-700 rounded-lg"
@@ -103,7 +103,7 @@
             (change)="isSpecial.set($any($event.target).checked)"
             class="h-5 w-5 rounded text-yellow-500 focus:ring-yellow-400"
           />
-          <span>Has Special Needs</span>
+          <span>NEE</span>
         </label>
         <label
           class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer"
@@ -114,7 +114,7 @@
             (change)="hasActitudinalProblems.set($any($event.target).checked)"
             class="h-5 w-5 rounded text-red-500 focus:ring-red-400"
           />
-          <span>Has Actitudinal Problems</span>
+          <span>Problemes Actitudinals</span>
         </label>
       </div>
 
@@ -122,7 +122,7 @@
         <label
           for="companions"
           class="block mb-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-          >Preferred Companions (comma-separated)</label
+          >Companys Desitjats (separats per comes)</label
         >
         <input
           id="companions"
@@ -141,7 +141,7 @@
           (click)="cancelEdit()"
           class="px-6 py-2 bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-slate-200 font-semibold rounded-full hover:bg-slate-300 dark:hover:bg-slate-500 focus:outline-none focus:ring-4 focus:ring-slate-300 dark:focus:ring-slate-700 transition-all duration-300 ease-in-out"
         >
-          Cancel
+          Cancelar
         </button>
         }
         <button
@@ -186,14 +186,14 @@
     <div>
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-slate-700 dark:text-slate-300">
-          Initial Roster ({{ people().length }})
+          Grup inicial ({{ people().length }})
         </h2>
         <button
           (click)="sortPeople()"
           [disabled]="people().length < 2"
           class="px-6 py-2 bg-teal-500 text-white font-semibold rounded-full hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800 disabled:bg-slate-400 disabled:cursor-not-allowed transition-all duration-300 ease-in-out shadow transform hover:scale-105"
         >
-          Sort People
+          Crear Grups
         </button>
       </div>
       <div
@@ -220,22 +220,22 @@
               <span
                 title="Has special needs"
                 class="w-6 h-6 flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/50 text-yellow-600 dark:text-yellow-400 rounded-full text-xs font-bold"
-                >SN</span
+                >NEE</span
               >
               } @if (person.hasActitudinalProblems) {
               <span
                 title="Has actitudinal problems"
                 class="w-6 h-6 flex items-center justify-center bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded-full text-xs font-bold"
-                >AP</span
+                >PA</span
               >
               }
             </div>
           </div>
           <p class="text-sm text-slate-500 dark:text-slate-400">
-            Knowledge: {{ person.knowledgeLevel }}
+            Aprenentatge: {{ person.knowledgeLevel }}
           </p>
           <p class="text-sm text-slate-500 dark:text-slate-400">
-            Companions: {{ person.preferredCompanions.join(", ") || "None" }}
+            Companys: {{ person.preferredCompanions.join(", ") || "None" }}
           </p>
 
           <div
@@ -290,13 +290,13 @@
     <div>
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-slate-700 dark:text-slate-300">
-          Sorted Groups
+          Grups Creats
         </h2>
         <button
           (click)="reset()"
           class="px-6 py-2 bg-slate-500 text-white font-semibold rounded-full hover:bg-slate-600 focus:outline-none focus:ring-4 focus:ring-slate-300 dark:focus:ring-slate-700 transition-all duration-300 ease-in-out shadow"
         >
-          Reset
+          Tornar
         </button>
       </div>
 
@@ -305,7 +305,7 @@
         class="mb-8 p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700"
       >
         <h3 class="text-2xl font-bold mb-4 text-slate-700 dark:text-slate-300">
-          Sorting Summary
+          Informació general
         </h3>
         <div class="overflow-x-auto">
           <table
@@ -318,9 +318,7 @@
                 <th scope="col" class="px-6 py-3">Metric</th>
                 <th scope="col" class="px-6 py-3 text-center">Group 1</th>
                 <th scope="col" class="px-6 py-3 text-center">Group 2</th>
-                <th scope="col" class="px-6 py-3 text-center">
-                  Balance (Diff)
-                </th>
+                <th scope="col" class="px-6 py-3 text-center">Diferència</th>
               </tr>
             </thead>
             <tbody>
@@ -331,7 +329,7 @@
                   scope="row"
                   class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap dark:text-white"
                 >
-                  Total People
+                  Total Alumnes
                 </th>
                 <td class="px-6 py-4 text-center">
                   {{ summary.people.group1 }}
@@ -350,7 +348,7 @@
                   scope="row"
                   class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap dark:text-white"
                 >
-                  Boys
+                  Nens
                 </th>
                 <td class="px-6 py-4 text-center">{{ summary.boys.group1 }}</td>
                 <td class="px-6 py-4 text-center">{{ summary.boys.group2 }}</td>
@@ -365,7 +363,7 @@
                   scope="row"
                   class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap dark:text-white"
                 >
-                  Girls
+                  Nenes
                 </th>
                 <td class="px-6 py-4 text-center">
                   {{ summary.girls.group1 }}
@@ -384,7 +382,7 @@
                   scope="row"
                   class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap dark:text-white"
                 >
-                  Special Needs
+                  NEE
                 </th>
                 <td class="px-6 py-4 text-center">
                   {{ summary.specialNeeds.group1 }}
@@ -403,7 +401,7 @@
                   scope="row"
                   class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap dark:text-white"
                 >
-                  Actitudinal Problems
+                  Problemes Actitudinals
                 </th>
                 <td class="px-6 py-4 text-center">
                   {{ summary.actitudinalProblems.group1 }}
@@ -422,7 +420,7 @@
                   scope="row"
                   class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap dark:text-white"
                 >
-                  Total Knowledge Level
+                  Nivell Total d'Aprenentatge
                 </th>
                 <td class="px-6 py-4 text-center">
                   {{ summary.knowledgeSum.group1 }}
@@ -439,7 +437,7 @@
                   scope="row"
                   class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap dark:text-white"
                 >
-                  Met Companion Preferences
+                  Preferències de companys resoltes
                 </th>
                 <td class="px-6 py-4 text-center">
                   {{ summary.metPreferences.group1 }}
@@ -462,7 +460,7 @@
           <h4
             class="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-2"
           >
-            Sorting Notes
+            Informació Addicional
           </h4>
           <ul
             class="list-disc list-inside space-y-1 text-sm text-blue-700 dark:text-blue-300"
@@ -484,7 +482,7 @@
           <h3
             class="text-xl font-bold mb-4 p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-600 dark:text-slate-300"
           >
-            Group 1 ({{ group1().length }})
+            Grup 1 ({{ group1().length }})
           </h3>
           <div
             class="space-y-3 min-h-[100px] rounded-lg transition-colors duration-300"
@@ -508,13 +506,13 @@
                   <span
                     title="Has special needs"
                     class="w-5 h-5 flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/50 text-yellow-600 dark:text-yellow-400 rounded-full text-xs font-bold"
-                    >SN</span
+                    >NEE</span
                   >
                   } @if (person.hasActitudinalProblems) {
                   <span
                     title="Has actitudinal problems"
                     class="w-5 h-5 flex items-center justify-center bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded-full text-xs font-bold"
-                    >AP</span
+                    >PA</span
                   >
                   }
                 </div>
@@ -522,7 +520,7 @@
               <div
                 class="flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-slate-400"
               >
-                <span>Knowledge:</span>
+                <span>Aprenentatge:</span>
                 <div class="flex items-center gap-0.5">
                   @for (lvl of knowledgeLevels; track lvl) {
                   <div
@@ -553,10 +551,10 @@
                   />
                 </svg>
                 <span class="text-amber-600 dark:text-amber-400"
-                  >Companions:</span
+                  >Companys:</span
                 >
                 } @else {
-                <span>Companions:</span>
+                <span>Companys:</span>
                 }
                 <span
                   class="font-medium text-slate-600 dark:text-slate-300"
@@ -582,7 +580,7 @@
           <h3
             class="text-xl font-bold mb-4 p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-600 dark:text-slate-300"
           >
-            Group 2 ({{ group2().length }})
+            Grup 2 ({{ group2().length }})
           </h3>
           <div
             class="space-y-3 min-h-[100px] rounded-lg transition-colors duration-300"
@@ -606,13 +604,13 @@
                   <span
                     title="Has special needs"
                     class="w-5 h-5 flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/50 text-yellow-600 dark:text-yellow-400 rounded-full text-xs font-bold"
-                    >SN</span
+                    >NEE</span
                   >
                   } @if (person.hasActitudinalProblems) {
                   <span
                     title="Has actitudinal problems"
                     class="w-5 h-5 flex items-center justify-center bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded-full text-xs font-bold"
-                    >AP</span
+                    >PA</span
                   >
                   }
                 </div>
@@ -620,7 +618,7 @@
               <div
                 class="flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-slate-400"
               >
-                <span>Knowledge:</span>
+                <span>Aprenentatge:</span>
                 <div class="flex items-center gap-0.5">
                   @for (lvl of knowledgeLevels; track lvl) {
                   <div
@@ -651,10 +649,10 @@
                   />
                 </svg>
                 <span class="text-amber-600 dark:text-amber-400"
-                  >Companions:</span
+                  >Companys:</span
                 >
                 } @else {
-                <span>Companions:</span>
+                <span>Companys:</span>
                 }
                 <span
                   class="font-medium text-slate-600 dark:text-slate-300"

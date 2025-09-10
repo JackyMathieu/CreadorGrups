@@ -131,6 +131,7 @@ const INITIAL_PEOPLE: Person[] = [
   standalone: true,
 })
 export class AppComponent {
+  title = 'Creador de Grups';
   people = signal<Person[]>(INITIAL_PEOPLE);
   group1 = signal<Person[]>([]);
   group2 = signal<Person[]>([]);
