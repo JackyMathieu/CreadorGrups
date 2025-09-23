@@ -10,11 +10,13 @@
     </p>
   </header>
 
+  <!-- Add/Edit Person Section -->
+  @if (isAddPersonSectionVisible()) {
   <section
     class="mb-8 p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 max-w-4xl mx-auto"
   >
     <h2 class="text-2xl font-bold mb-6 text-slate-700 dark:text-slate-300">
-      {{ isEditing() ? "Edit " + name() : "Add New Person" }}
+      {{ isEditing() ? "Editar " + name() : "Afegir Nou Alumne" }}
     </h2>
     <form
       (submit)="$event.preventDefault(); addOrUpdatePerson()"
@@ -29,7 +31,7 @@
         <input
           id="name"
           type="text"
-          placeholder="e.g., John Doe"
+          placeholder="Introdueix el nom de l'alumne"
           [value]="name()"
           (input)="name.set($any($event.target).value)"
           class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
@@ -44,7 +46,7 @@
         <div
           class="flex items-center gap-4 p-2 bg-slate-50 dark:bg-slate-700 rounded-lg"
         >
-          <label class="flex items-center gap-2 cursor-pointer">
+          <label class="flex items-center gap-2 cursor-pointer white">
             <input
               type="radio"
               name="sex"
@@ -55,7 +57,7 @@
             />
             Masculí
           </label>
-          <label class="flex items-center gap-2 cursor-pointer">
+          <label class="flex items-center gap-2 cursor-pointer white">
             <input
               type="radio"
               name="sex"
@@ -72,13 +74,13 @@
       <div>
         <label
           class="block mb-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-          >Nivel d'Aprenentatge</label
+          >Nivell d'Aprenentatge</label
         >
         <div
           class="flex items-center gap-4 p-2 bg-slate-50 dark:bg-slate-700 rounded-lg"
         >
           @for (level of knowledgeLevels; track level) {
-          <label class="flex items-center gap-1 cursor-pointer">
+          <label class="flex items-center gap-1 cursor-pointer white">
             <input
               type="radio"
               name="knowledge"
@@ -95,7 +97,7 @@
 
       <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label
-          class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer"
+          class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer white"
         >
           <input
             type="checkbox"
@@ -106,7 +108,7 @@
           <span>NEE</span>
         </label>
         <label
-          class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer"
+          class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700 rounded-lg cursor-pointer white"
         >
           <input
             type="checkbox"
@@ -122,12 +124,12 @@
         <label
           for="companions"
           class="block mb-2 text-sm font-medium text-slate-600 dark:text-slate-300"
-          >Companys Desitjats (separats per comes)</label
+          >Companys Preferits (separats per comes)</label
         >
         <input
           id="companions"
           type="text"
-          placeholder="e.g., Alice, Bob"
+          placeholder="David, Anna, Gemma..."
           [value]="preferredCompanions()"
           (input)="preferredCompanions.set($any($event.target).value)"
           class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
@@ -148,13 +150,12 @@
           type="submit"
           class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-all duration-300 ease-in-out transform hover:scale-105 shadow"
         >
-          {{ isEditing() ? "Update Person" : "Add Person" }}
+          {{ isEditing() ? "Actualitzar Alumne" : "Afegir Alumne" }}
         </button>
       </div>
     </form>
   </section>
-
-  @if (sortingError()) {
+  } @if (sortingError()) {
   <div
     class="max-w-4xl mx-auto mb-6 p-4 bg-red-100 dark:bg-red-900/50 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-300 rounded-lg shadow-md"
   >
@@ -186,7 +187,7 @@
     <div>
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-slate-700 dark:text-slate-300">
-          Grup inicial ({{ people().length }})
+          Total d'alumnes: {{ people().length }}
         </h2>
         <button
           (click)="sortPeople()"
@@ -305,7 +306,7 @@
         class="mb-8 p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700"
       >
         <h3 class="text-2xl font-bold mb-4 text-slate-700 dark:text-slate-300">
-          Informació general
+          Resum de l'equilibri entre grups
         </h3>
         <div class="overflow-x-auto">
           <table
@@ -315,9 +316,9 @@
               class="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-300"
             >
               <tr>
-                <th scope="col" class="px-6 py-3">Metric</th>
-                <th scope="col" class="px-6 py-3 text-center">Group 1</th>
-                <th scope="col" class="px-6 py-3 text-center">Group 2</th>
+                <th scope="col" class="px-6 py-3">Mètrica</th>
+                <th scope="col" class="px-6 py-3 text-center">Grup 1</th>
+                <th scope="col" class="px-6 py-3 text-center">Grup 2</th>
                 <th scope="col" class="px-6 py-3 text-center">Diferència</th>
               </tr>
             </thead>

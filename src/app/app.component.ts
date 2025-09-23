@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   signal,
   computed,
+  effect,
 } from '@angular/core';
 
 export interface Person {
@@ -31,108 +32,18 @@ export interface SummaryData {
   metPreferences: SummaryStat;
 }
 
-const INITIAL_PEOPLE: Person[] = [
-  {
-    id: 1,
-    name: 'Alice',
-    sex: 'girl',
-    isSpecial: true,
-    hasActitudinalProblems: false,
-    knowledgeLevel: 3,
-    preferredCompanions: ['Charlie', 'Eve'],
-  },
-  {
-    id: 2,
-    name: 'Bob',
-    sex: 'boy',
-    isSpecial: false,
-    hasActitudinalProblems: true,
-    knowledgeLevel: 2,
-    preferredCompanions: ['David'],
-  },
-  {
-    id: 3,
-    name: 'Charlie',
-    sex: 'boy',
-    isSpecial: false,
-    hasActitudinalProblems: false,
-    knowledgeLevel: 4,
-    preferredCompanions: ['Alice', 'Frank'],
-  },
-  {
-    id: 4,
-    name: 'Diana',
-    sex: 'girl',
-    isSpecial: false,
-    hasActitudinalProblems: false,
-    knowledgeLevel: 4,
-    preferredCompanions: ['Grace'],
-  },
-  {
-    id: 5,
-    name: 'Eve',
-    sex: 'girl',
-    isSpecial: true,
-    hasActitudinalProblems: true,
-    knowledgeLevel: 1,
-    preferredCompanions: ['Alice'],
-  },
-  {
-    id: 6,
-    name: 'Frank',
-    sex: 'boy',
-    isSpecial: false,
-    hasActitudinalProblems: false,
-    knowledgeLevel: 3,
-    preferredCompanions: ['Charlie'],
-  },
-  {
-    id: 7,
-    name: 'Grace',
-    sex: 'girl',
-    isSpecial: false,
-    hasActitudinalProblems: false,
-    knowledgeLevel: 2,
-    preferredCompanions: ['Diana', 'Heidi'],
-  },
-  {
-    id: 8,
-    name: 'Heidi',
-    sex: 'girl',
-    isSpecial: false,
-    hasActitudinalProblems: true,
-    knowledgeLevel: 1,
-    preferredCompanions: [],
-  },
-  {
-    id: 9,
-    name: 'Ivan',
-    sex: 'boy',
-    isSpecial: true,
-    hasActitudinalProblems: false,
-    knowledgeLevel: 4,
-    preferredCompanions: ['Bob'],
-  },
-  {
-    id: 10,
-    name: 'Judy',
-    sex: 'girl',
-    isSpecial: false,
-    hasActitudinalProblems: false,
-    knowledgeLevel: 3,
-    preferredCompanions: ['Alice', 'Diana'],
-  },
-];
+const INITIAL_PEOPLE: Person[] = [];
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
 export class AppComponent {
   title = 'Creador de Grups';
-  people = signal<Person[]>(INITIAL_PEOPLE);
+  people = signal<Person[]>(this.loadPeopleFromStorage());
   group1 = signal<Person[]>([]);
   group2 = signal<Person[]>([]);
   isSorted = signal<boolean>(false);
@@ -143,8 +54,11 @@ export class AppComponent {
   sortingNotes = signal<string[]>([]);
 
   // --- CRUD Properties ---
-  private nextId = signal(Math.max(...INITIAL_PEOPLE.map((p) => p.id), 0) + 1);
+  private nextId = signal(this.loadNextIdFromStorage());
   editingPersonId = signal<number | null>(null);
+
+  // New signal for controlling form visibility
+  isAddPersonSectionVisible = signal<boolean>(true);
 
   // Form state signals
   name = signal('');
@@ -152,11 +66,91 @@ export class AppComponent {
   isSpecial = signal(false);
   hasActitudinalProblems = signal(false);
   knowledgeLevel = signal<1 | 2 | 3 | 4>(1);
-  preferredCompanions = signal(''); // Comma-separated string
-
-  // Computed signal to know if form is for editing
+  preferredCompanions = signal('');
   isEditing = computed(() => this.editingPersonId() !== null);
   knowledgeLevels: (1 | 2 | 3 | 4)[] = [1, 2, 3, 4];
+
+  constructor() {
+    effect(() => {
+      this.saveToStorage();
+    });
+  }
+
+  // New method to toggle form visibility
+  toggleAddPersonSection(): void {
+    this.isAddPersonSectionVisible.update((visible) => !visible);
+    if (!this.isAddPersonSectionVisible()) {
+      this.resetForm(); // Reset form when hiding to clear any data
+    }
+  }
+
+  // Load people from localStorage
+  private loadPeopleFromStorage(): Person[] {
+    const savedPeople = localStorage.getItem('people');
+    if (savedPeople) {
+      try {
+        const parsed = JSON.parse(savedPeople);
+        if (Array.isArray(parsed) && parsed.every(this.isValidPerson)) {
+          return parsed;
+        }
+      } catch (e) {
+        console.error('Error parsing people from localStorage:', e);
+      }
+    }
+    return INITIAL_PEOPLE;
+  }
+
+  // Load nextId from localStorage
+  private loadNextIdFromStorage(): number {
+    const savedNextId = localStorage.getItem('nextId');
+    if (savedNextId) {
+      try {
+        const parsed = JSON.parse(savedNextId);
+        if (typeof parsed === 'number' && parsed > 0) {
+          return parsed;
+        }
+      } catch (e) {
+        console.error('Error parsing nextId from localStorage:', e);
+      }
+    }
+    return Math.max(...INITIAL_PEOPLE.map((p) => p.id), 0) + 1;
+  }
+
+  // Save people and nextId to localStorage
+  private saveToStorage(): void {
+    try {
+      localStorage.setItem('people', JSON.stringify(this.people()));
+      localStorage.setItem('nextId', JSON.stringify(this.nextId()));
+    } catch (e) {
+      console.error('Error saving to localStorage:', e);
+    }
+  }
+
+  // Validate that an object matches the Person interface
+  private isValidPerson(obj: any): obj is Person {
+    return (
+      typeof obj === 'object' &&
+      typeof obj.id === 'number' &&
+      typeof obj.name === 'string' &&
+      (obj.sex === 'boy' || obj.sex === 'girl') &&
+      typeof obj.isSpecial === 'boolean' &&
+      typeof obj.hasActitudinalProblems === 'boolean' &&
+      [1, 2, 3, 4].includes(obj.knowledgeLevel) &&
+      Array.isArray(obj.preferredCompanions) &&
+      obj.preferredCompanions.every((comp: any) => typeof comp === 'string')
+    );
+  }
+
+  // New method to get satisfied preferred companions
+  getSatisfiedPreferredCompanions(person: Person): string[] {
+    const group = this.group1().some((p) => p.id === person.id)
+      ? this.group1()
+      : this.group2();
+    const groupNames = new Set(group.map((p) => p.name));
+    return person.preferredCompanions.filter((companion) =>
+      groupNames.has(companion)
+    );
+  }
 
   sortPeople(): void {
     this.reset();
@@ -216,7 +210,6 @@ export class AppComponent {
       const totalPossiblePreferences = currentPeople.filter(
         (p) => p.preferredCompanions.length > 0
       ).length;
-      // We want to MINIMIZE the number of UNMET preferences, so we square the difference
       const preferenceImbalance = Math.pow(
         totalPossiblePreferences - totalMetPreferences,
         2
@@ -243,7 +236,7 @@ export class AppComponent {
       this.recalculateSortedState(g1, g2, true, minImbalance);
       this.isSorted.set(true);
     } else {
-      this.sortingError.set('An unexpected error occurred during sorting.');
+      this.sortingError.set('Hi ha hagut un error inesperat.');
     }
   }
 
@@ -265,13 +258,9 @@ export class AppComponent {
     if (isInitialSort) {
       if (minImbalance! > 0) {
         notes.push(
-          'A perfectly balanced solution was not possible. This arrangement represents the best compromise found across all criteria.'
+          'No és possible trobar una solució perfecta. Aquest ordenament representa la millor opció equilibrant tots els criteris.'
         );
       }
-    } else {
-      notes.push(
-        'Groups have been manually adjusted from the initial optimal sort.'
-      );
     }
 
     const allPeople = [...g1, ...g2];
@@ -286,7 +275,7 @@ export class AppComponent {
     if (unmetPeopleNames.length > 0) {
       const plural = unmetPeopleNames.length > 1 ? 's' : '';
       notes.push(
-        `Trade-off: Could not place the following individual${plural} with a preferred companion: ${unmetPeopleNames.join(
+        `ALERTA: No s\'ha pogut posar a l'alumne${plural} amb el seu company escollit: ${unmetPeopleNames.join(
           ', '
         )}.`
       );
@@ -394,6 +383,7 @@ export class AppComponent {
   }
 
   reset(): void {
+    this.toggleAddPersonSection();
     this.group1.set([]);
     this.group2.set([]);
     this.isSorted.set(false);
@@ -404,7 +394,6 @@ export class AppComponent {
     this.sortingNotes.set([]);
   }
 
-  // --- CRUD Methods ---
   addOrUpdatePerson(): void {
     if (!this.name().trim()) return;
     const companions = this.preferredCompanions()
