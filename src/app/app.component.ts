@@ -273,11 +273,13 @@ export class AppComponent {
       .map((p) => p.name);
 
     if (unmetPeopleNames.length > 0) {
+      const singular = unmetPeopleNames.length <= 1 ? "l'" : '';
       const plural = unmetPeopleNames.length > 1 ? 's' : '';
+      const articlePlural = unmetPeopleNames.length > 1 ? 'ls' : '';
       notes.push(
-        `ALERTA: No s\'ha pogut posar a l'alumne${plural} amb el seu company escollit: ${unmetPeopleNames.join(
+        `ALERTA: No s\'ha pogut posar a${articlePlural} ${singular}alumne${plural}: ${unmetPeopleNames.join(
           ', '
-        )}.`
+        )} amb el${plural} seu${plural} company${plural} escollit${plural}.`
       );
     }
 

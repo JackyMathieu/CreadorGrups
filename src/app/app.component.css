@@ -3,6 +3,19 @@ input::placeholder {
   color: white;
 }
 
+input,
+select {
+  color: white;
+}
+
 .white {
   color: white;
+}
+
+.warning {
+  color: yellow;
+}
+
+.danger {
+  color: orange;
 }
